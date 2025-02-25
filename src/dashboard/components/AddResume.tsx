@@ -10,20 +10,22 @@ import { v4 as uuidv4 } from "uuid";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import createNewResume from "@/service/GlobalApi";
 import { useUser } from "@clerk/clerk-react";
+import GlobalApi from "@/service/GlobalApi";
+import { useNavigate } from "react-router-dom";
 
 function AddResume() {
   const [openDialog, setOpenDialog] = useState(false);
   const [resumeTitle, setResumeTitle] = useState("");
   const [loading, setLoading] = useState(false);
   const { user } = useUser();
+  const navigation = useNavigate();
 
   const onCreate = () => {
     const uuid = uuidv4();
     setLoading(true);
     if (user?.primaryEmailAddress?.emailAddress && user?.fullName) {
-      createNewResume({
+      GlobalApi.createNewResume({
         resumeId: uuid,
         title: resumeTitle,
         userEmail: user.primaryEmailAddress.emailAddress,
@@ -34,6 +36,7 @@ function AddResume() {
             setLoading(false);
             setResumeTitle("");
             setOpenDialog(false);
+            navigation("/dashboard/resume/" + uuid + "/edit");
           }
         },
         (error) => {
