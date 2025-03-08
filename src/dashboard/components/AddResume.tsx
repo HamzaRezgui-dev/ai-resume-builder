@@ -36,7 +36,9 @@ function AddResume() {
             setLoading(false);
             setResumeTitle("");
             setOpenDialog(false);
-            navigation("/dashboard/resume/" + uuid + "/edit");
+            navigation(
+              "/dashboard/resume/" + resp.data.data.documentId + "/edit"
+            );
           }
         },
         (error) => {
